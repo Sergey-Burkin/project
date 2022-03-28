@@ -1,4 +1,5 @@
-#include<iostream>
+#include<string>
+#pragma once
 class Player{
 private:
     std::string name;

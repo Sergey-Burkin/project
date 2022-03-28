@@ -1,9 +1,12 @@
 #include<iostream>
-#include<player.h>
-
+#include "player.h"
+#include "board.h"
+#include "coordinates.h"
 int main() {
     std::string s = "Name";
     Player gamma(s);
-    std::cout << gamma.getName(); 
+    Board b;
+    Coordinates c(0, 0);
+    std::cout << gamma.getName() << b.isCeilFree(c) << '\n'; 
     return 0;
 }
