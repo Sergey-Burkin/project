@@ -2,8 +2,8 @@
 #include <cstddef>
 class Coordinates{
 public:
-    size_t x;
-    size_t y;
+    int x;
+    int y;
     Coordinates();
-    Coordinates(size_t x, size_t y);
+    Coordinates(int x, int y);
 };

@@ -5,8 +5,8 @@
 #include "vector"
 class Board{
 private:
-    static const int N = 10;
-    static const int M = 10;
+    static const size_t N = 10;
+    static const size_t M = 10;
     Ceil board[N][M];
     std::vector<Ship*> ships;
 
