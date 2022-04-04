@@ -10,3 +10,7 @@ void Player::setPassword(std::string oldPassword, std::string newPassword) {
 bool Player::verifyPassword(std::string string) {
     return password == string;
 }
+
+Player_data& Player::get_data() {
+    return data;
+}

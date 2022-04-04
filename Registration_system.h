@@ -10,4 +10,5 @@ public:
     void register_new_player(const std::string& name, const std::string& password);
     void remove_player(const std::string& name);
     bool login(std::string name, std::string password);
+    Player_data& get_player_data(std::string name, std::string password);
 };

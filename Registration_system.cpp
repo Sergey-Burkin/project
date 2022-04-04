@@ -1,8 +1,9 @@
 #pragma once
+
 #include "Registration_system.h"
 
 bool Registration_system::is_player_exists(std::string name) {
-    for (auto& person : data) {
+    for (auto& person: data) {
         if (person.getName() == name) {
             return true;
         }
@@ -39,7 +40,7 @@ bool Registration_system::login(std::string name, std::string password) {
         errorCommand.execute();
         return false;
     }
-    for (auto& player : data) {
+    for (auto& player: data) {
         if (player.getName() == name) {
             if (player.verifyPassword(password)) {
                 return true;
@@ -47,6 +48,18 @@ bool Registration_system::login(std::string name, std::string password) {
             Error_command errorCommand("The password is wrong!\n");
             errorCommand.execute();
             return false;
+        }
+    }
+}
+
+Player_data& Registration_system::get_player_data(std::string name, std::string password) {
+    if (!login(name, password)) {
+        Player_data fake_data;
+        return fake_data;
+    }
+    for (auto& player: data) {
+        if (player.getName() == name) {
+            return player.get_data();
         }
     }
 }
