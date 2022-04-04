@@ -1,6 +1,6 @@
 #include<player.h>
 
-Player::Player(std::string name) : name (name) {};
+Player::Player(std::string name, std::string password) : name (name), password(password) {};
 std::string Player::getName() {return name;}
 void Player::setPassword(std::string oldPassword, std::string newPassword) {
    if (oldPassword == password){
