@@ -1,3 +1,5 @@
+#pragma  once
+
 #include "player.h"
 #include "vector"
 #include "Command.h"
@@ -18,4 +20,5 @@ public:
     PlayerData& get_player_data(std::string name, std::string password);
 
     void addPlayerScore(const std::string& name, int score);
+    std::vector<std::pair<std::string, int>> getLeaderScore();
 };

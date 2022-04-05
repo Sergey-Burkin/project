@@ -34,6 +34,6 @@ public:
     Mark getOwnMark(Coordinates c);
     Mark getOtherMark(Coordinates c);
 
-    int getN() {return N};
-    int getM() {return M};
+    int getN() {return N;};
+    int getM() {return M;};
 };

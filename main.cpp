@@ -1,15 +1,10 @@
 #include<iostream>
-#include "player.h"
-#include "board.h"
-#include "coordinates.h"
+#include "ConsoleInterface.h"
 
 int main() {
-    std::string s = "Name";
-    Player gamma(s, std::string());
-    Board b;
-    Coordinates c(0, 0);
-    Board d = Board();
-    std::cout << d.isAllShipsSetted() << d.getHealth();
-    std::cout << gamma.getName() << b.isCeilFree(c) << '\n';
+    Registration_system system;
+    ConsoleInterface console;
+    console.system = &system;
+    console.startConsoleGame();
     return 0;
 }

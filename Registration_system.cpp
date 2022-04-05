@@ -75,3 +75,11 @@ void Registration_system::addPlayerScore(const std::string& name, int score) {
         }
     }
 }
+
+std::vector<std::pair<std::string, int>> Registration_system::getLeaderScore() {
+    std::vector<std::pair<std::string, int>> result;
+    for (auto player : data) {
+        result.emplace_back(std::make_pair(player.getName(), player.get_data().getScore()));
+    }
+    return result;
+}
