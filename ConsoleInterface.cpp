@@ -29,6 +29,7 @@ void ConsoleInterface::registerPlayer() {
 }
 
 void ConsoleInterface::newGame() {
+    GameSession gameSession(*system);
 
 }
 
