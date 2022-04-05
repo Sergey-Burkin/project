@@ -52,9 +52,9 @@ bool Registration_system::login(std::string name, std::string password) {
     }
 }
 
-Player_data& Registration_system::get_player_data(std::string name, std::string password) {
+PlayerData& Registration_system::get_player_data(std::string name, std::string password) {
     if (!login(name, password)) {
-        Player_data fake_data;
+        PlayerData fake_data;
         return fake_data;
     }
     for (auto& player: data) {

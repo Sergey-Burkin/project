@@ -1,17 +1,17 @@
 #include "player_data.h"
 
-void Player_data::set_nick_name(const std::string& new_nick) {
+void PlayerData::setNickName(const std::string& new_nick) {
     nick_name = new_nick;
 }
 
-std::string Player_data::get_nick_name() {
+std::string PlayerData::getNickName() {
     return nick_name;
 }
 
-int Player_data::get_score() {
+int PlayerData::getScore() {
     return score;
 }
 
-void Player_data::add_score(int value) {
+void PlayerData::addScore(int value) {
     score += value;
 }

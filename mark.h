@@ -1,4 +1,4 @@
-class Mark{
+class Mark {
 public:
     char mark;
 };

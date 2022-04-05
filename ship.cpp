@@ -14,12 +14,16 @@ int Ship::getHealth() {
     if (!isSetted) {
         return result;
     }
-    for (auto currentDeck : deck) {
+    for (auto currentDeck: deck) {
         if (currentDeck->getBombed()) {
             --result;
         }
     }
     return result;
+}
+
+bool Ship::getSetted() {
+    return isSetted;
 }
 
 LinearShip::LinearShip(size_t n) {

@@ -12,7 +12,11 @@ bool Board::isCeilFree(Coordinates c) {
     return true;
 }
 
-Board::Board() = default;
+Board::Board() {
+    for (auto x: {4, 3, 3, 2, 2, 2, 1, 1, 1, 1}) {
+        ships.emplace_back(static_cast<Ship*> (new LinearShip(x)));
+    }
+};
 
 Ceil& Board::getCeil(Coordinates c) {
     return board[c.x][c.y];
@@ -21,7 +25,16 @@ Ceil& Board::getCeil(Coordinates c) {
 int Board::getHealth() {
     int result = 0;
     for (auto& current_ship: ships) {
-        result += current_ship.getHealth();
+        result += current_ship->getHealth();
     }
     return result;
+}
+
+bool Board::isAllShipsSetted() {
+    for (auto ship : ships) {
+        if (!ship->getSetted()) {
+            return false;
+        }
+    }
+    return true;
 }
