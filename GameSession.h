@@ -1,3 +1,5 @@
+#pragma once
+
 #include "player_data.h"
 #include "board.h"
 #include "Command.h"
@@ -11,26 +13,28 @@ private:
     int currentMove = 0;
     bool gamerReady[NUMBER_OF_PLAYERS];
     Registration_system* system;
+    int theWinner = -1;
+    void assertNumber(int gameNumber);
+    void assertGameEnd();
+
 public:
     GameSession(Registration_system& system1) : system(&system1) {};
 
-    bool allGamersAreReady() {
-        for (auto x: gamerReady) {
-            if (!x) {
-                return false;
-            }
-        }
-        return true;
-    }
+    bool allGamersAreReady();
 
-    void login(int gamerNumber, const std::string& name, const std::string& password) {
-        if (allGamersAreReady()) {
-            Error_command("Error the game is already running\n").execute();
-            return;
-        }
-        if (system->login(name, password)) {
-            gamer[gamerNumber] = system->get_player_data(name, password);
-        }
-    }
+    void login(int gamerNumber, const std::string& name, const std::string& password);
 
+    void nextMove();
+
+    void setShip(int gameNumber, int shipNumber, Coordinates begin, Coordinates end);
+
+    void removeShip(int gamerIndex, int shipIndex);
+
+    void removeShip(int gamerIndex, Coordinates c);
+
+    void ready(int gamerIndex);
+
+    void bomb(int gamerIndex, int otherGamerIndex, Coordinates c);
+
+    Mark getMark(int gamerIndex, int boardIndex, Coordinates c);
 };

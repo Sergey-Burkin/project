@@ -25,3 +25,17 @@ public:
         std::cerr << message;
     }
 };
+
+class SayCommand : Command {
+private:
+    std::string message;
+public:
+
+    SayCommand();
+
+    SayCommand(const std::string& message);
+
+    void execute() {
+        std::cout << message;
+    }
+};

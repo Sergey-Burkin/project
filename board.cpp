@@ -1,5 +1,6 @@
 #include "board.h"
 #include <algorithm>
+#include "Command.h"
 
 bool Board::isCeilFree(Coordinates c) {
     for (size_t i = std::max(0, c.x - 1); i < std::min(c.x + 1, static_cast<int>(N)); ++i) {
@@ -31,10 +32,51 @@ int Board::getHealth() {
 }
 
 bool Board::isAllShipsSetted() {
-    for (auto ship : ships) {
+    for (auto ship: ships) {
         if (!ship->getSetted()) {
             return false;
         }
     }
     return true;
+}
+
+std::vector<int> Board::getUnsettedShipsList() {
+    std::vector<int> result;
+    for (int i = 0; i < ships.size(); ++i) {
+        if (!ships[i]->getSetted()) {
+            result.emplace_back(i);
+        }
+    }
+    return result;
+}
+
+void Board::setShip(int shipIndex, Coordinates begin, Coordinates end) {
+    auto currentShip = ships[shipIndex];
+    currentShip->removeFromSea();
+    if (!currentShip->canSet(begin, end, this)) {
+        Error_command("Can't set this ship\n").execute();
+        return;
+    }
+    currentShip->set(begin, end, this);
+}
+
+void Board::removeShip(int shipIndex) {
+    ships[shipIndex]->removeFromSea();
+}
+
+void Board::removeShip(Coordinates c) {
+    if (getCeil(c).getShipped()) {
+        getCeil(c).getShip()->removeFromSea();
+    }
+}
+
+Mark Board::getOwnMark(Coordinates c) {
+    if (getCeil(c).getShipped()) {
+        return Mark('S');
+    }
+    return Mark('*');
+}
+
+Mark Board::getOtherMark(Coordinates c) {
+    return getCeil(c).getState();
 }

@@ -1,8 +1,9 @@
 #include<ceil.h>
-
 void Ceil::setShip(Ship& other) { ship = &other; }
 
-void Ceil::removeShip() { ship = nullptr; }
+void Ceil::removeShip() {  //see
+    ship = nullptr;
+}
 
 void Ceil::bomb() { bombed = true; }
 
@@ -15,3 +16,7 @@ void Ceil::setState(Mark m) { state = m; }
 Mark Ceil::getState() { return state; }
 
 void Ceil::updateState() {}
+
+Ship* Ceil::getShip() {
+    return ship;
+}

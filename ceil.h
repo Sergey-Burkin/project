@@ -8,7 +8,7 @@ class Ceil {
 private:
     Ship* ship = nullptr;
     bool bombed = false;
-    Mark state;
+    Mark state = Mark('*');
 public:
     void setShip(Ship& other);
 
@@ -25,4 +25,7 @@ public:
     Mark getState();
 
     void updateState();
+
+    Ship* getShip();
+
 };

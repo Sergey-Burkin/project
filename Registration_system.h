@@ -16,4 +16,6 @@ public:
     bool login(std::string name, std::string password);
 
     PlayerData& get_player_data(std::string name, std::string password);
+
+    void addPlayerScore(const std::string& name, int score);
 };

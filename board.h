@@ -22,4 +22,18 @@ public:
     int getHealth();
 
     bool isAllShipsSetted();
+
+    std::vector<int> getUnsettedShipsList();
+
+    void setShip(int shipIndex, Coordinates begin, Coordinates end);
+
+    void removeShip(int shipIndex);
+
+    void removeShip(Coordinates c);
+
+    Mark getOwnMark(Coordinates c);
+    Mark getOtherMark(Coordinates c);
+
+    int getN() {return N};
+    int getM() {return M};
 };

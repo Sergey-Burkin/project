@@ -63,3 +63,15 @@ PlayerData& Registration_system::get_player_data(std::string name, std::string p
         }
     }
 }
+
+void Registration_system::addPlayerScore(const std::string& name, int score) {
+    if (!is_player_exists(name)) {
+        Error_command("Error no such user!\n").execute();
+        return;
+    }
+    for (auto player: data) {
+        if (player.getName() == name) {
+            player.get_data().addScore(score);
+        }
+    }
+}

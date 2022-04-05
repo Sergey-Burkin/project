@@ -3,8 +3,10 @@
 
 void Ship::removeFromSea() {
     for (auto& current: deck) {
-        current->removeShip();
-        current = nullptr;
+        if (current != nullptr) {
+            current->removeShip();
+            current = nullptr;
+        }
     }
     isSetted = false;
 }
