@@ -1,11 +1,10 @@
 #include "board.h"
-#include <algorithm>
 #include "Command.h"
 
 bool Board::isCeilFree(Coordinates c) {
     for (size_t i = std::max(0, c.x - 1); i < std::min(c.x + 1, static_cast<int>(N)); ++i) {
         for (size_t j = std::max(0, c.y - 1); j < std::min(c.y + 1, static_cast<int>(M)); ++j) {
-            if (board[c.x][c.y].getShipped()) {
+            if (board[i][j].getShipped()) {
                 return false;
             }
         }
@@ -14,10 +13,10 @@ bool Board::isCeilFree(Coordinates c) {
 }
 
 Board::Board() {
-    for (auto x: {4, 3, 3, 2, 2, 2, 1, 1, 1, 1}) {
+    for (auto x: {4, 1}) {     //, 3, 3, 2, 2, 2, 1, 1, 1, 1}) {
         ships.emplace_back(static_cast<Ship*> (new LinearShip(x)));
     }
-};
+}
 
 Ceil& Board::getCeil(Coordinates c) {
     return board[c.x][c.y];
@@ -40,11 +39,11 @@ bool Board::isAllShipsSetted() {
     return true;
 }
 
-std::vector<int> Board::getUnsettedShipsList() {
-    std::vector<int> result;
+std::vector<std::pair<int, int>> Board::getUnsettedShipsList() {
+    std::vector<std::pair<int, int>> result;
     for (int i = 0; i < ships.size(); ++i) {
         if (!ships[i]->getSetted()) {
-            result.emplace_back(i);
+            result.emplace_back(i, ships[i]->getSize());
         }
     }
     return result;
@@ -72,9 +71,9 @@ void Board::removeShip(Coordinates c) {
 
 Mark Board::getOwnMark(Coordinates c) {
     if (getCeil(c).getShipped()) {
-        return Mark('S');
+        return {'@'};
     }
-    return Mark('*');
+    return {'*'};
 }
 
 Mark Board::getOtherMark(Coordinates c) {

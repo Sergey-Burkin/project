@@ -15,7 +15,7 @@ protected:
     std::vector<Ceil*> deck;
 public:
     void removeFromSea();
-
+    int getSize();
     virtual bool canSet(Coordinates begin, Coordinates end, Board* board) = 0;
 
     virtual void set(Coordinates begin, Coordinates end, Board* board) = 0;

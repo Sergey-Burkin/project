@@ -5,6 +5,8 @@
 #include "Command.h"
 #include "Registration_system.h"
 
+class Registration_system;
+
 class GameSession {
 private:
     static const int NUMBER_OF_PLAYERS = 2;
@@ -12,9 +14,12 @@ private:
     Board board[NUMBER_OF_PLAYERS];
     int currentMove = 0;
     bool gamerReady[NUMBER_OF_PLAYERS];
+    bool gamerLogged[NUMBER_OF_PLAYERS];
     Registration_system* system;
     int theWinner = -1;
-    void assertNumber(int gameNumber);
+
+    void assertIndex(int gamerIndex);
+
     void assertGameEnd();
 
 public:
@@ -22,11 +27,11 @@ public:
 
     bool allGamersAreReady();
 
-    void login(int gamerNumber, const std::string& name, const std::string& password);
+    void login(int gamerIndex, const std::string& name, const std::string& password);
 
     void nextMove();
 
-    void setShip(int gameNumber, int shipNumber, Coordinates begin, Coordinates end);
+    void setShip(int gamerIndex, int shipIndex, Coordinates begin, Coordinates end);
 
     void removeShip(int gamerIndex, int shipIndex);
 
@@ -37,4 +42,14 @@ public:
     void bomb(int gamerIndex, int otherGamerIndex, Coordinates c);
 
     Mark getMark(int gamerIndex, int boardIndex, Coordinates c);
+
+    int getBoardHeight(int boardIndex);
+
+    int getBoardWidth(int boardIndex);
+
+    bool getLogged(int gamerIndex);
+
+    int getNumberOfPlayers();
+
+    std::vector<std::pair<int, int>> getFreeShips(int gamerIndex);
 };

@@ -9,19 +9,20 @@ bool GameSession::allGamersAreReady() {
     return true;
 }
 
-void GameSession::login(int gamerNumber, const std::string& name, const std::string& password) {
-//    assertNumber(gamerNumber);
+void GameSession::login(int gamerIndex, const std::string& name, const std::string& password) {
+//    assertIndex(gamerIndex);
     if (allGamersAreReady()) {
         Error_command("Error the game is already running\n").execute();
         return;
     }
     if (system->login(name, password)) {
-        gamer[gamerNumber] = system->get_player_data(name, password);
+        gamer[gamerIndex] = system->get_player_data(name, password);
+        gamerLogged[gamerIndex] = true;
     }
 }
 
-void GameSession::assertNumber(int gameNumber) {
-    if (gameNumber != currentMove) {
+void GameSession::assertIndex(int gamerIndex) {
+    if (gamerIndex != currentMove) {
         Error_command("It's not your turn\n");
     }
 }
@@ -31,8 +32,8 @@ void GameSession::nextMove() {
     currentMove %= NUMBER_OF_PLAYERS;
 }
 
-void GameSession::setShip(int gameNumber, int shipNumber, Coordinates begin, Coordinates end) {
-    board[gameNumber].setShip(shipNumber, begin, end);
+void GameSession::setShip(int gamerIndex, int shipIndex, Coordinates begin, Coordinates end) {
+    board[gamerIndex].setShip(shipIndex, begin, end);
 }
 
 void GameSession::removeShip(int gamerIndex, int shipIndex) {
@@ -52,7 +53,7 @@ void GameSession::ready(int gamerIndex) {
 }
 
 void GameSession::bomb(int gamerIndex, int otherGamerIndex, Coordinates c) {
-    assertNumber(gamerIndex);
+    assertIndex(gamerIndex);
     assertGameEnd();
     if (gamerIndex == otherGamerIndex) {
         Error_command("Error, You can't bomb your sea!\n").execute();
@@ -97,4 +98,24 @@ void GameSession::assertGameEnd() {
 
 Mark GameSession::getMark(int gamerIndex, int boardIndex, Coordinates c) {
     return gamerIndex == boardIndex ? board[boardIndex].getOwnMark(c) : board[boardIndex].getOtherMark(c);
+}
+
+int GameSession::getBoardHeight(int boardIndex) {
+    return board[boardIndex].getN();
+}
+
+int GameSession::getBoardWidth(int boardIndex) {
+    return board[boardIndex].getM();
+}
+
+bool GameSession::getLogged(int gamerIndex) {
+    return gamerLogged[gamerIndex];
+}
+
+int GameSession::getNumberOfPlayers() {
+    return NUMBER_OF_PLAYERS;
+}
+
+std::vector<std::pair<int, int>> GameSession::getFreeShips(int gamerIndex) {
+    return board[gamerIndex].getUnsettedShipsList();
 }

@@ -28,6 +28,10 @@ bool Ship::getSetted() {
     return isSetted;
 }
 
+int Ship::getSize() {
+    return size;
+}
+
 LinearShip::LinearShip(size_t n) {
     size = n;
     isSetted = false;
@@ -36,16 +40,20 @@ LinearShip::LinearShip(size_t n) {
     }
 }
 
-Coordinates getIthCoordinate(Coordinates begin, Coordinates end, size_t n, size_t i) {
-    return Coordinates(begin.x + (end.x - begin.x) / n * i, begin.y + (end.y - begin.y) / n * i);
+Coordinates getIthCoordinate(Coordinates begin, Coordinates end, int n, size_t i) {
+    if (n == 1) {
+        return begin;
+    }
+    return Coordinates(begin.x + (end.x - begin.x) / (n - 1) * i,
+                       begin.y + (end.y - begin.y) / (n - 1) * i);
 
 }
 
 bool LinearShip::canSet(Coordinates begin, Coordinates end, Board* board) {
-    if ((begin.x == end.x) == (begin.y == end.y)) {
+    if ((begin.x != end.x) && (begin.y != end.y)) {
         return false;
     }
-    if (abs(begin.x - end.x) + abs(begin.y - end.y) != size) {
+    if (abs(begin.x - end.x) + abs(begin.y - end.y) != size - 1) {
         return false;
     }
     for (size_t i = 0; i < size; ++i) {
@@ -62,6 +70,7 @@ void LinearShip::set(Coordinates begin, Coordinates end, Board* board) {
         deck[i] = &board->getCeil(current_coordinate);
         board->getCeil(current_coordinate).setShip(*this);
     }
+    isSetted = true;
 }
 
 void LinearShip::removeFromSea() {

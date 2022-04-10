@@ -15,3 +15,12 @@ SayCommand::SayCommand() {
 SayCommand::SayCommand(const std::string& message) : message(message) {
 
 }
+
+LogInCommand::LogInCommand(GameSession* gameSession, int gamerIndex, const std::string& name,
+                           const std::string& password) : gameSession(gameSession), gamerIndex(gamerIndex), name(name),
+                                                          password(password) {
+}
+
+void LogInCommand::execute() {
+    gameSession->login(gamerIndex, name, password);
+}

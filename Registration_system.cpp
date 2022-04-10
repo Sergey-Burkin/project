@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Registration_system.h"
 
 bool Registration_system::is_player_exists(std::string name) {
@@ -50,6 +48,7 @@ bool Registration_system::login(std::string name, std::string password) {
             return false;
         }
     }
+    return false;
 }
 
 PlayerData& Registration_system::get_player_data(std::string name, std::string password) {

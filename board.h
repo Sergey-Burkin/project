@@ -23,7 +23,7 @@ public:
 
     bool isAllShipsSetted();
 
-    std::vector<int> getUnsettedShipsList();
+    std::vector<std::pair<int, int>> getUnsettedShipsList();
 
     void setShip(int shipIndex, Coordinates begin, Coordinates end);
 
