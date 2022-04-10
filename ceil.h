@@ -18,13 +18,11 @@ public:
 
     bool getShipped();
 
-    bool getBombed();
+    bool getBombed() const;
 
     void setState(Mark m);
 
     Mark getState();
-
-    void updateState();
 
     Ship* getShip();
 

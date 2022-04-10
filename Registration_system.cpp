@@ -1,6 +1,6 @@
 #include "Registration_system.h"
 
-bool Registration_system::is_player_exists(std::string name) {
+bool Registration_system::is_player_exists(const std::string& name) {
     for (auto& person: data) {
         if (person.getName() == name) {
             return true;
@@ -33,9 +33,9 @@ void Registration_system::remove_player(const std::string& name) {
     }
 }
 
-bool Registration_system::login(std::string name, std::string password) {
+bool Registration_system::login(const std::string& name, const std::string& password) {
     if (!is_player_exists(name)) {
-        Error_command errorCommand("Can't finde user" + name + '\n');
+        Error_command errorCommand("Can't find user " + name + '\n');
         errorCommand.execute();
         return false;
     }
@@ -52,16 +52,16 @@ bool Registration_system::login(std::string name, std::string password) {
     return false;
 }
 
-PlayerData& Registration_system::get_player_data(std::string name, std::string password) {
+PlayerData& Registration_system::get_player_data(const std::string& name, const std::string& password) {
     if (!login(name, password)) {
-        PlayerData fake_data;
-        return fake_data;
+        throw "Error";
     }
     for (auto& player: data) {
         if (player.getName() == name) {
             return player.get_data();
         }
     }
+    throw "Error";
 }
 
 void Registration_system::addPlayerScore(const std::string& name, int score) {

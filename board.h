@@ -32,8 +32,10 @@ public:
     void removeShip(Coordinates c);
 
     Mark getOwnMark(Coordinates c);
+
     Mark getOtherMark(Coordinates c);
 
-    int getN() {return N;};
-    int getM() {return M;};
+    static int getN() { return N; };
+
+    static int getM() { return M; };
 };

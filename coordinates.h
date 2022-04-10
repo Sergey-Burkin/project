@@ -1,4 +1,5 @@
 #pragma once
+
 #include "iostream"
 #include <cstddef>
 
@@ -10,5 +11,6 @@ public:
     Coordinates();
 
     Coordinates(int x, int y);
+
     Coordinates(std::string s);
 };

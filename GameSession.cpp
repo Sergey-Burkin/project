@@ -1,8 +1,8 @@
 #include "GameSession.h"
 
 bool GameSession::allGamersAreReady() {
-    for (auto x: gamerReady) {
-        if (!x) {
+    for (auto currentGamerReady: gamerReady) {
+        if (!currentGamerReady) {
             return false;
         }
     }
@@ -10,7 +10,6 @@ bool GameSession::allGamersAreReady() {
 }
 
 void GameSession::login(int gamerIndex, const std::string& name, const std::string& password) {
-//    assertIndex(gamerIndex);
     if (allGamersAreReady()) {
         Error_command("Error the game is already running\n").execute();
         return;
@@ -22,7 +21,7 @@ void GameSession::login(int gamerIndex, const std::string& name, const std::stri
     }
 }
 
-void GameSession::assertIndex(int gamerIndex) {
+void GameSession::assertIndex(int gamerIndex) const {
     if (gamerIndex != currentMove) {
         Error_command("It's not your turn\n");
     }
@@ -35,10 +34,6 @@ void GameSession::nextMove() {
 
 void GameSession::setShip(int gamerIndex, int shipIndex, Coordinates begin, Coordinates end) {
     board[gamerIndex].setShip(shipIndex, begin, end);
-}
-
-void GameSession::removeShip(int gamerIndex, int shipIndex) {
-    board[gamerIndex].removeShip(shipIndex);
 }
 
 void GameSession::removeShip(int gamerIndex, Coordinates c) {
@@ -68,14 +63,15 @@ void GameSession::bomb(int gamerIndex, int otherGamerIndex, Coordinates c) {
         return;
     }
     currentCeil.setState('b');
-    for (int i = std::max(0, c.x - 1); i < std::min(board[otherGamerIndex].getN(), c.x + 1); ++i) {
-        for (int j = std::max(0, c.y - 1); j < std::min(board[otherGamerIndex].getM(), c.y + 1); ++j) {
-            if (i == c.x || j == c.y ) {
+    for (int i = std::max(0, c.x - 1); i < std::min(Board::getN(), c.x + 2); ++i) {
+        for (int j = std::max(0, c.y - 1); j < std::min(Board::getM(), c.y + 2); ++j) {
+            if (i == c.x || j == c.y) {
                 continue;
             }
             board[otherGamerIndex].getCeil({i, j}).setState('!');
         }
     }
+    currentCeil.setState('x');
     SayCommand(currentCeil.getShip()->getHealth() == 0 ? "Убил\n" : "Ранил\n").execute();
     bool winner = true;
     for (int index = 0; index < NUMBER_OF_PLAYERS; ++index) {
@@ -93,7 +89,7 @@ void GameSession::bomb(int gamerIndex, int otherGamerIndex, Coordinates c) {
     }
 }
 
-void GameSession::assertGameEnd() {
+void GameSession::assertGameEnd() const {
     if (theWinner != -1) {
         Error_command("Error, game has ended!\n").execute();
     }
@@ -123,7 +119,7 @@ std::vector<std::pair<int, int>> GameSession::getFreeShips(int gamerIndex) {
     return board[gamerIndex].getUnsettedShipsList();
 }
 
-int GameSession::getCurrentPlayer() {
+int GameSession::getCurrentPlayer() const {
     return currentMove;
 }
 
@@ -131,10 +127,12 @@ PlayerData GameSession::getPlayerData(int playerIndex) {
     return gamer[playerIndex];
 }
 
-int GameSession::getWinner() {
+int GameSession::getWinner() const {
     return theWinner;
 }
 
 std::string GameSession::getGamerName(int gamerIndex) {
     return gamerName[gamerIndex];
 }
+
+GameSession::GameSession(Registration_system& system) : system(&system) {}

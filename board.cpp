@@ -71,7 +71,7 @@ void Board::removeShip(Coordinates c) {
 
 Mark Board::getOwnMark(Coordinates c) {
     if (getCeil(c).getShipped()) {
-        return {'@'};
+        return {getCeil(c).getBombed() ? 'x' : '@'};
     }
     return {'*'};
 }

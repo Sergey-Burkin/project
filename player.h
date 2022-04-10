@@ -15,9 +15,9 @@ public:
 
     std::string getName();
 
-    void setPassword(std::string oldPassword, std::string newPassword);
+    void setPassword(const std::string& oldPassword, std::string newPassword);
 
-    bool verifyPassword(std::string string);
+    bool verifyPassword(const std::string& string);
 
     PlayerData& get_data();
 };

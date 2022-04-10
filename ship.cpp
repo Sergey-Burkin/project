@@ -28,7 +28,7 @@ bool Ship::getSetted() {
     return isSetted;
 }
 
-int Ship::getSize() {
+int Ship::getSize() const {
     return size;
 }
 
@@ -40,7 +40,7 @@ LinearShip::LinearShip(size_t n) {
     }
 }
 
-Coordinates getIthCoordinate(Coordinates begin, Coordinates end, int n, size_t i) {
+Coordinates getIthCoordinate(Coordinates begin, Coordinates end, size_t n, size_t i) {
     if (n == 1) {
         return begin;
     }
@@ -71,10 +71,6 @@ void LinearShip::set(Coordinates begin, Coordinates end, Board* board) {
         board->getCeil(current_coordinate).setShip(*this);
     }
     isSetted = true;
-}
-
-void LinearShip::removeFromSea() {
-    Ship::removeFromSea();
 }
 
 int LinearShip::getHealth() {

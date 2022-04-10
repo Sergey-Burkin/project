@@ -23,8 +23,7 @@ void ConsoleInterface::prepareUser(GameSession& game, int userIndex) {
         read(password);
         LogInCommand(&game, userIndex, name, password).execute();
     }
-    bool ready = false;
-    while (!ready) {
+    while (true) {
         printField(game, userIndex, userIndex);
         auto shipList = game.getFreeShips(userIndex);
         if (shipList.empty()) {
@@ -32,7 +31,7 @@ void ConsoleInterface::prepareUser(GameSession& game, int userIndex) {
             int x;
             std::cin >> x;
             if (x) {
-                ready = true;
+                game.ready(userIndex);
                 break;
             }
         }
@@ -128,9 +127,9 @@ void ConsoleInterface::newGame() {
     }
 }
 
-void ConsoleInterface::printLeaderBoard() {
+void ConsoleInterface::printLeaderBoard() const {
     auto vector = system->getLeaderScore();
-    for (auto pair: vector) {
+    for (auto& pair: vector) {
         std::cout << pair.first << ' ' << pair.second << '\n';
     }
 }

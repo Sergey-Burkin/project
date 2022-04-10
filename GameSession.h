@@ -19,12 +19,12 @@ private:
     Registration_system* system;
     int theWinner = -1;
 
-    void assertIndex(int gamerIndex);
+    void assertIndex(int gamerIndex) const;
 
-    void assertGameEnd();
+    void assertGameEnd() const;
 
 public:
-    GameSession(Registration_system& system1) : system(&system1) {};
+    explicit GameSession(Registration_system& system);;
 
     bool allGamersAreReady();
 
@@ -33,8 +33,6 @@ public:
     void nextMove();
 
     void setShip(int gamerIndex, int shipIndex, Coordinates begin, Coordinates end);
-
-    void removeShip(int gamerIndex, int shipIndex);
 
     void removeShip(int gamerIndex, Coordinates c);
 
@@ -50,15 +48,15 @@ public:
 
     bool getLogged(int gamerIndex);
 
-    int getNumberOfPlayers();
+    static int getNumberOfPlayers();
 
     std::vector<std::pair<int, int>> getFreeShips(int gamerIndex);
 
-    int getCurrentPlayer();
+    int getCurrentPlayer() const;
 
     PlayerData getPlayerData(int playerIndex);
 
-    int getWinner();
+    int getWinner() const;
 
     std::string getGamerName(int gamerIndex);
 };
