@@ -57,7 +57,7 @@ bool LinearShip::canSet(Coordinates begin, Coordinates end, Board* board) {
         return false;
     }
     for (size_t i = 0; i < size; ++i) {
-        if (!(board->isCeilFree(getIthCoordinate(begin, end, size, i)))) {
+        if (!(board->isSquareFree(getIthCoordinate(begin, end, size, i)))) {
             return false;
         }
     }
@@ -67,8 +67,8 @@ bool LinearShip::canSet(Coordinates begin, Coordinates end, Board* board) {
 void LinearShip::set(Coordinates begin, Coordinates end, Board* board) {
     for (size_t i = 0; i < size; ++i) {
         Coordinates current_coordinate = getIthCoordinate(begin, end, size, i);
-        deck[i] = &board->getCeil(current_coordinate);
-        board->getCeil(current_coordinate).setShip(*this);
+        deck[i] = &board->getSquare(current_coordinate);
+        board->getSquare(current_coordinate).setShip(*this);
     }
     isSetted = true;
 }

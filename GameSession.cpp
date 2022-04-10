@@ -55,24 +55,24 @@ void GameSession::bomb(int gamerIndex, int otherGamerIndex, Coordinates c) {
         Error_command("Error, You can't bomb your sea!\n").execute();
         return;
     }
-    Ceil& currentCeil = board[otherGamerIndex].getCeil(c);
-    currentCeil.bomb();
-    if (!currentCeil.getShipped()) {
+    Square& square = board[otherGamerIndex].getSquare(c);
+    square.bomb();
+    if (!square.getShipped()) {
         SayCommand("Мимо!\n").execute();
         nextMove();
         return;
     }
-    currentCeil.setState('b');
+    square.setState('b');
     for (int i = std::max(0, c.x - 1); i < std::min(Board::getN(), c.x + 2); ++i) {
         for (int j = std::max(0, c.y - 1); j < std::min(Board::getM(), c.y + 2); ++j) {
             if (i == c.x || j == c.y) {
                 continue;
             }
-            board[otherGamerIndex].getCeil({i, j}).setState('!');
+            board[otherGamerIndex].getSquare({i, j}).setState('!');
         }
     }
-    currentCeil.setState('x');
-    SayCommand(currentCeil.getShip()->getHealth() == 0 ? "Убил\n" : "Ранил\n").execute();
+    square.setState('x');
+    SayCommand(square.getShip()->getHealth() == 0 ? "Убил\n" : "Ранил\n").execute();
     bool winner = true;
     for (int index = 0; index < NUMBER_OF_PLAYERS; ++index) {
         if (index == gamerIndex) {

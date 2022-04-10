@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ceil.h"
+#include "square.h"
 #include "coordinates.h"
 #include "vector"
 #include <cstddef>
@@ -12,7 +12,7 @@ class Ship {
 protected:
     size_t size;
     bool isSetted;
-    std::vector<Ceil*> deck;
+    std::vector<Square*> deck;
 public:
     void removeFromSea();
 

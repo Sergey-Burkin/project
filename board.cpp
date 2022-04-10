@@ -1,7 +1,7 @@
 #include "board.h"
 #include "Command.h"
 
-bool Board::isCeilFree(Coordinates c) {
+bool Board::isSquareFree(Coordinates c) {
     for (size_t i = std::max(0, c.x - 1); i < std::min(c.x + 1, static_cast<int>(N)); ++i) {
         for (size_t j = std::max(0, c.y - 1); j < std::min(c.y + 1, static_cast<int>(M)); ++j) {
             if (board[i][j].getShipped()) {
@@ -18,7 +18,7 @@ Board::Board() {
     }
 }
 
-Ceil& Board::getCeil(Coordinates c) {
+Square& Board::getSquare(Coordinates c) {
     return board[c.x][c.y];
 }
 
@@ -64,18 +64,18 @@ void Board::removeShip(int shipIndex) {
 }
 
 void Board::removeShip(Coordinates c) {
-    if (getCeil(c).getShipped()) {
-        getCeil(c).getShip()->removeFromSea();
+    if (getSquare(c).getShipped()) {
+        getSquare(c).getShip()->removeFromSea();
     }
 }
 
 Mark Board::getOwnMark(Coordinates c) {
-    if (getCeil(c).getShipped()) {
-        return {getCeil(c).getBombed() ? 'x' : '@'};
+    if (getSquare(c).getShipped()) {
+        return {getSquare(c).getBombed() ? 'x' : '@'};
     }
     return {'*'};
 }
 
 Mark Board::getOtherMark(Coordinates c) {
-    return getCeil(c).getState();
+    return getSquare(c).getState();
 }

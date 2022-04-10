@@ -4,7 +4,7 @@
 
 class Ship;
 
-class Ceil {
+class Square {
 private:
     Ship* ship = nullptr;
     bool bombed = false;
