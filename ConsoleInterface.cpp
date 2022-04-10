@@ -93,14 +93,15 @@ void ConsoleInterface::prepareUser(GameSession& game, int userIndex) {
         int shipIndex;
         read(shipIndex);
         if (shipIndex == -1) {
-            int x, y;
-            std::cin >> x >> y;
-            game.removeShip(userIndex, Coordinates(x, y));
+            std::string s;
+            read(s);
+            game.removeShip(userIndex, {s});
             continue;
         }
-        int x, y, z, t;
-        std::cin >> x >> y >> z >> t;
-        game.setShip(userIndex, shipList[shipIndex].first, Coordinates(x, y), Coordinates(z, t));
+        std::string s ,t;
+        read(s);
+        read(t);
+        game.setShip(userIndex, shipList[shipIndex].first, {s}, {t});
     }
 }
 
