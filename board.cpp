@@ -13,7 +13,7 @@ bool Board::isCeilFree(Coordinates c) {
 }
 
 Board::Board() {
-    for (auto x: {4, 1}) {     //, 3, 3, 2, 2, 2, 1, 1, 1, 1}) {
+    for (auto x: {4}) {     //, 3, 3, 2, 2, 2, 1, 1, 1, 1}) {
         ships.emplace_back(static_cast<Ship*> (new LinearShip(x)));
     }
 }

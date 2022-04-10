@@ -17,6 +17,7 @@ void GameSession::login(int gamerIndex, const std::string& name, const std::stri
     }
     if (system->login(name, password)) {
         gamer[gamerIndex] = system->get_player_data(name, password);
+        gamerName[gamerIndex] = name;
         gamerLogged[gamerIndex] = true;
     }
 }
@@ -59,19 +60,20 @@ void GameSession::bomb(int gamerIndex, int otherGamerIndex, Coordinates c) {
         Error_command("Error, You can't bomb your sea!\n").execute();
         return;
     }
-    auto currentCeil = board[otherGamerIndex].getCeil(c);
+    Ceil& currentCeil = board[otherGamerIndex].getCeil(c);
     currentCeil.bomb();
     if (!currentCeil.getShipped()) {
         SayCommand("Мимо!\n").execute();
         nextMove();
         return;
     }
+    currentCeil.setState('b');
     for (int i = std::max(0, c.x - 1); i < std::min(board[otherGamerIndex].getN(), c.x + 1); ++i) {
         for (int j = std::max(0, c.y - 1); j < std::min(board[otherGamerIndex].getM(), c.y + 1); ++j) {
             if (i == c.x || j == c.y ) {
                 continue;
             }
-            board[otherGamerIndex].getCeil(Coordinates(i, j)).setState('!');
+            board[otherGamerIndex].getCeil({i, j}).setState('!');
         }
     }
     SayCommand(currentCeil.getShip()->getHealth() == 0 ? "Убил\n" : "Ранил\n").execute();
@@ -83,10 +85,11 @@ void GameSession::bomb(int gamerIndex, int otherGamerIndex, Coordinates c) {
         if (board[index].getHealth() != 0) {
             winner = false;
         }
-        if (winner) {
-            SayCommand("И победитель " + gamer[index].getNickName() + "!\n");
-            theWinner = gamerIndex;
-        }
+    }
+    if (winner) {
+        SayCommand("И победитель " + gamer[gamerIndex].getNickName() + "!\n").execute();
+        theWinner = gamerIndex;
+        system->addPlayerScore(gamerName[theWinner], 1);
     }
 }
 
@@ -118,4 +121,20 @@ int GameSession::getNumberOfPlayers() {
 
 std::vector<std::pair<int, int>> GameSession::getFreeShips(int gamerIndex) {
     return board[gamerIndex].getUnsettedShipsList();
+}
+
+int GameSession::getCurrentPlayer() {
+    return currentMove;
+}
+
+PlayerData GameSession::getPlayerData(int playerIndex) {
+    return gamer[playerIndex];
+}
+
+int GameSession::getWinner() {
+    return theWinner;
+}
+
+std::string GameSession::getGamerName(int gamerIndex) {
+    return gamerName[gamerIndex];
 }

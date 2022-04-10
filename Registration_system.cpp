@@ -16,6 +16,7 @@ void Registration_system::register_new_player(const std::string& name, const std
         return;
     }
     data.emplace_back(name, password);
+    data.back().get_data().setNickName(name);
 }
 
 void Registration_system::remove_player(const std::string& name) {
@@ -68,7 +69,7 @@ void Registration_system::addPlayerScore(const std::string& name, int score) {
         Error_command("Error no such user!\n").execute();
         return;
     }
-    for (auto player: data) {
+    for (auto& player: data) {
         if (player.getName() == name) {
             player.get_data().addScore(score);
         }
@@ -77,8 +78,8 @@ void Registration_system::addPlayerScore(const std::string& name, int score) {
 
 std::vector<std::pair<std::string, int>> Registration_system::getLeaderScore() {
     std::vector<std::pair<std::string, int>> result;
-    for (auto player : data) {
-        result.emplace_back(std::make_pair(player.getName(), player.get_data().getScore()));
+    for (auto player: data) {
+        result.emplace_back(std::make_pair(player.get_data().getNickName(), player.get_data().getScore()));
     }
     return result;
 }

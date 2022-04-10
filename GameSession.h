@@ -10,6 +10,7 @@ class Registration_system;
 class GameSession {
 private:
     static const int NUMBER_OF_PLAYERS = 2;
+    std::string gamerName[NUMBER_OF_PLAYERS];
     PlayerData gamer[NUMBER_OF_PLAYERS];
     Board board[NUMBER_OF_PLAYERS];
     int currentMove = 0;
@@ -52,4 +53,12 @@ public:
     int getNumberOfPlayers();
 
     std::vector<std::pair<int, int>> getFreeShips(int gamerIndex);
+
+    int getCurrentPlayer();
+
+    PlayerData getPlayerData(int playerIndex);
+
+    int getWinner();
+
+    std::string getGamerName(int gamerIndex);
 };
