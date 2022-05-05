@@ -53,7 +53,7 @@ void CommonInterface::newGame() {
         } while (!system->login(gameSession.getGamerName(playerIndex), password));
         while (gameSession.getCurrentPlayer() == playerIndex && gameSession.getWinner() == -1) {
             showAllBoards(gameSession, playerIndex);
-            SayCommand("Выбирай клетку для атаки:\n").execute();
+            SayCommand("Выбор клетки для атаки:\n").execute();
             int nextPlayerIndex = (playerIndex + 1) % gameSession.getNumberOfPlayers();
             gameSession.bomb(playerIndex, nextPlayerIndex, askForSquare());
         }

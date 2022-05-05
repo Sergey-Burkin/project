@@ -1,6 +1,5 @@
 #pragma once
 
-#include <iostream>
 #include "GameSession.h"
 #include "RegistrationSystem.h"
 #include "string"
