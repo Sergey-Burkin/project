@@ -19,5 +19,5 @@ public:
 
     bool verifyPassword(const std::string& string);
 
-    PlayerData& get_data();
+    PlayerData& getData();
 };

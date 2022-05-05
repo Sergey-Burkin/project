@@ -53,7 +53,7 @@ void Board::setShip(int shipIndex, Coordinates begin, Coordinates end) {
     auto currentShip = ships[shipIndex];
     currentShip->removeFromSea();
     if (!currentShip->canSet(begin, end, this)) {
-        Error_command("Can't set this ship\n").execute();
+        ErrorCommand("Can't set this ship\n").execute();
         return;
     }
     currentShip->set(begin, end, this);

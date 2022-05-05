@@ -11,11 +11,11 @@ bool GameSession::allGamersAreReady() {
 
 void GameSession::login(int gamerIndex, const std::string& name, const std::string& password) {
     if (allGamersAreReady()) {
-        Error_command("Error the game is already running\n").execute();
+        ErrorCommand("Error the game is already running\n").execute();
         return;
     }
     if (system->login(name, password)) {
-        gamer[gamerIndex] = system->get_player_data(name, password);
+        gamer[gamerIndex] = system->getPlayerData(name, password);
         gamerName[gamerIndex] = name;
         gamerLogged[gamerIndex] = true;
     }
@@ -23,7 +23,7 @@ void GameSession::login(int gamerIndex, const std::string& name, const std::stri
 
 void GameSession::assertIndex(int gamerIndex) const {
     if (gamerIndex != currentMove) {
-        Error_command("It's not your turn\n");
+        ErrorCommand("It's not your turn\n");
     }
 }
 
@@ -42,7 +42,7 @@ void GameSession::removeShip(int gamerIndex, Coordinates c) {
 
 void GameSession::ready(int gamerIndex) {
     if (!board[gamerIndex].isAllShipsSetted()) {
-        Error_command("Error. Not all ships set!\n").execute();
+        ErrorCommand("Error. Not all ships set!\n").execute();
         return;
     }
     gamerReady[gamerIndex] = true;
@@ -52,7 +52,7 @@ void GameSession::bomb(int gamerIndex, int otherGamerIndex, Coordinates c) {
     assertIndex(gamerIndex);
     assertGameEnd();
     if (gamerIndex == otherGamerIndex) {
-        Error_command("Error, You can't bomb your sea!\n").execute();
+        ErrorCommand("Error, You can't bomb your sea!\n").execute();
         return;
     }
     Square& square = board[otherGamerIndex].getSquare(c);
@@ -91,7 +91,7 @@ void GameSession::bomb(int gamerIndex, int otherGamerIndex, Coordinates c) {
 
 void GameSession::assertGameEnd() const {
     if (theWinner != -1) {
-        Error_command("Error, game has ended!\n").execute();
+        ErrorCommand("Error, game has ended!\n").execute();
     }
 }
 
@@ -135,4 +135,4 @@ std::string GameSession::getGamerName(int gamerIndex) {
     return gamerName[gamerIndex];
 }
 
-GameSession::GameSession(Registration_system& system) : system(&system) {}
+GameSession::GameSession(RegistrationSystem& system) : system(&system) {}

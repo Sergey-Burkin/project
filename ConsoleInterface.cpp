@@ -6,12 +6,12 @@ void ConsoleInterface::read(T& object) {
     while (!std::cin) {
         std::cin.clear();
         std::cin.ignore(100, '\n');
-        Error_command("Invalid input! Try again: \n").execute();
+        ErrorCommand("Invalid input! Try again: \n").execute();
         std::cin >> object;
     }
 }
 
-void ConsoleInterface::printField(GameSession& game, int gamerIndex, int boardIndex) {
+void ConsoleInterface::showField(GameSession& game, int gamerIndex, int boardIndex) {
     std::cout << "+";
     for (size_t j = 0; j < game.getBoardWidth(boardIndex); ++j) {
         std::cout << j;
@@ -71,34 +71,6 @@ void ConsoleInterface::showMenu() {
               "0. Выход\n";
 }
 
-
-void ConsoleInterface::prepareUser(GameSession& game, int userIndex) {
-    while (!game.getLogged(userIndex)) {
-        std::string name, password;
-        askForLogin(userIndex, name, password);
-        LogInCommand(&game, userIndex, name, password).execute();
-    }
-    while (true) {
-        printField(game, userIndex, userIndex);
-        auto shipList = game.getFreeShips(userIndex);
-        if (shipList.empty()) {
-            bool ready = askIfReady();
-            if (ready) {
-                game.ready(userIndex);
-                break;
-            }
-        }
-
-        int shipIndex = askForShip(shipList);
-        if (shipIndex == -1) {
-            game.removeShip(userIndex, askForSquare());
-            continue;
-        }
-        SayCommand("Выберете две крайние клетки для корабля\n").execute();
-        game.setShip(userIndex, shipList[shipIndex].first, askForSquare(), askForSquare());
-    }
-}
-
 int ConsoleInterface::getOption() {
     int x;
     read(x);
@@ -116,58 +88,14 @@ void ConsoleInterface::askRegister(std::string& name, std::string& password) {
 void ConsoleInterface::showAllBoards(GameSession& game, int playerIndex) {
     for (int i = 0; i < game.getNumberOfPlayers(); ++i) {
         SayCommand("Доска игрока " + game.getPlayerData(i).getNickName() + "\n").execute();
-        printField(game, playerIndex, i);
+        showField(game, playerIndex, i);
         std::cout << '\n';
     }
 }
 
-void ConsoleInterface::relogin(const std::string& nick, std::string& password) {
+void ConsoleInterface::loginAgain(const std::string& nick, std::string& password) {
     SayCommand("Введте пароль снова, " + nick + "\n").execute();
     read(password);
-}
-
-void ConsoleInterface::startConsoleGame() {
-    int input = -1;
-    while (input != 0) {
-        showMenu();
-        input = getOption();
-        if (input == 1) {
-            registerPlayer();
-        } else if (input == 2) {
-            newGame();
-        } else if (input == 3) {
-            showLeaderBoard();
-        }
-    }
-}
-
-void ConsoleInterface::registerPlayer() {
-    std::string name, password;
-    askRegister(name, password);
-    system->register_new_player(name, password);
-}
-
-
-void ConsoleInterface::newGame() {
-    GameSession gameSession(*system);
-    for (int gamerIndex = 0; gamerIndex < gameSession.getNumberOfPlayers(); ++gamerIndex) {
-        prepareUser(gameSession, gamerIndex);
-    }
-    while (gameSession.getWinner() == -1) {
-        int playerIndex = gameSession.getCurrentPlayer();
-        PlayerData data = gameSession.getPlayerData(playerIndex);
-        std::string nick = data.getNickName();
-        std::string name, password;
-        do {
-            relogin(nick, password);
-        } while (!system->login(gameSession.getGamerName(playerIndex), password));
-        while (gameSession.getCurrentPlayer() == playerIndex && gameSession.getWinner() == -1) {
-            showAllBoards(gameSession, playerIndex);
-            SayCommand("Выбирай клетку для атаки:\n").execute();
-            int nextPlayerIndex = (playerIndex + 1) % gameSession.getNumberOfPlayers();
-            gameSession.bomb(playerIndex, nextPlayerIndex, askForSquare());
-        }
-    }
 }
 
 void ConsoleInterface::showLeaderBoard() {
@@ -176,3 +104,4 @@ void ConsoleInterface::showLeaderBoard() {
         std::cout << pair.first << ' ' << pair.second << '\n';
     }
 }
+

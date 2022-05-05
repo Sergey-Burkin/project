@@ -1,9 +1,9 @@
 #include "ConsoleInterface.h"
 
 int main() {
-    Registration_system system;
+    RegistrationSystem system;
     ConsoleInterface console;
     console.system = &system;
-    console.startConsoleGame();
+    console.startGame();
     return 0;
 }

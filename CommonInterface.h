@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include "GameSession.h"
-#include "Registration_system.h"
+#include "RegistrationSystem.h"
 #include "string"
 #include "vector"
 #include "coordinates.h"
@@ -17,9 +17,13 @@ protected:
     virtual int getOption() = 0;
     virtual void askRegister(std::string& name, std::string& password) = 0;
     virtual void showAllBoards(GameSession& game, int playerIndex) = 0;
-    virtual void relogin(const std::string& nick, std::string& password) = 0;
-
+    virtual void loginAgain(const std::string& nick, std::string& password) = 0;
+    virtual void showField(GameSession& game, int gamerIndex, int boardIndex) = 0;
+    void prepareUser(GameSession& game, int userIndex);
 public:
     virtual void showLeaderBoard() = 0;
-
+    RegistrationSystem* system;
+    void startGame();
+    void registerPlayer();
+    void newGame();
 };

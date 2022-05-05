@@ -1,7 +1,5 @@
 #include<player.h>
 
-#include <utility>
-
 Player::Player(std::string name, std::string password) : name(std::move(name)), password(std::move(password)) {}
 
 std::string Player::getName() { return name; }
@@ -16,7 +14,7 @@ bool Player::verifyPassword(const std::string& string) {
     return password == string;
 }
 
-PlayerData& Player::get_data() {
+PlayerData& Player::getData() {
     return data;
 }
 
