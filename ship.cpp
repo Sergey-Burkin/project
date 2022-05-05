@@ -44,8 +44,9 @@ Coordinates getIthCoordinate(Coordinates begin, Coordinates end, size_t n, size_
     if (n == 1) {
         return begin;
     }
-    return Coordinates(begin.x + (end.x - begin.x) / (n - 1) * i,
-                       begin.y + (end.y - begin.y) / (n - 1) * i);
+    int size = n;
+    return Coordinates(begin.x + (end.x - begin.x) / (size - 1) * i,
+                       begin.y + (end.y - begin.y) / (size - 1) * i);
 
 }
 
