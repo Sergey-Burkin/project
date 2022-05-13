@@ -48,6 +48,22 @@ void GameSession::ready(int gamerIndex) {
     gamerReady[gamerIndex] = true;
 }
 
+void GameSession::markNeighbourSquare(int gamerIndex, Coordinates c, bool verticalAndHorizontal = false) {
+    for (int i = std::max(0, c.x - 1); i < std::min(Board::getN(), c.x + 2); ++i) {
+        for (int j = std::max(0, c.y - 1); j < std::min(Board::getM(), c.y + 2); ++j) {
+            if (board[gamerIndex].getSquare({i, j}).getState().mark == 'x') {
+                continue;
+            }
+            if ((i == c.x || j == c.y) && !verticalAndHorizontal) {
+                continue;
+            }
+
+            board[gamerIndex].getSquare({i, j}).setState('!');
+        }
+    }
+}
+
+
 void GameSession::bomb(int gamerIndex, int otherGamerIndex, Coordinates c) {
     assertIndex(gamerIndex);
     assertGameEnd();
@@ -57,22 +73,23 @@ void GameSession::bomb(int gamerIndex, int otherGamerIndex, Coordinates c) {
     }
     Square& square = board[otherGamerIndex].getSquare(c);
     square.bomb();
+    square.setState('b');
     if (!square.getShipped()) {
         SayCommand("Мимо!\n").execute();
         nextMove();
         return;
     }
-    square.setState('b');
-    for (int i = std::max(0, c.x - 1); i < std::min(Board::getN(), c.x + 2); ++i) {
-        for (int j = std::max(0, c.y - 1); j < std::min(Board::getM(), c.y + 2); ++j) {
-            if (i == c.x || j == c.y) {
-                continue;
-            }
-            board[otherGamerIndex].getSquare({i, j}).setState('!');
+    square.setState('x');
+    markNeighbourSquare(otherGamerIndex, c, false);
+    bool killed = square.getShip()->getHealth() == 0;
+    SayCommand(killed ? "Убил\n" : "Ранил\n").execute();
+    if (killed) {
+        auto ship = square.getShip();
+        std::vector<Square*>& deck = ship->getDeck();
+        for (auto& currentSquare : deck) {
+            markNeighbourSquare(otherGamerIndex, currentSquare->getCoordinates(), true);
         }
     }
-    square.setState('x');
-    SayCommand(square.getShip()->getHealth() == 0 ? "Убил\n" : "Ранил\n").execute();
     bool winner = true;
     for (int index = 0; index < NUMBER_OF_PLAYERS; ++index) {
         if (index == gamerIndex) {

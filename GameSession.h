@@ -23,6 +23,8 @@ private:
 
     void assertGameEnd() const;
 
+    void markNeighbourSquare(int gamerIndex, Coordinates c, bool verticalAndHorizontal);
+
 public:
     explicit GameSession(RegistrationSystem& system);;
 

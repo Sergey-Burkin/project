@@ -16,6 +16,11 @@ Board::Board() {
     for (auto x: {4, 3, 3, 2, 2, 2, 1, 1, 1, 1}) {
         ships.emplace_back(static_cast<Ship*> (new LinearShip(x)));
     }
+    for (int i = 0; i < Board::N; ++i) {
+        for (int j = 0; j < Board::M; ++j) {
+            board[i][j].setCoordinates({i, j});
+        }
+    }
 }
 
 Square& Board::getSquare(Coordinates c) {
