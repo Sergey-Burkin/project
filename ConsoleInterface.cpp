@@ -1,6 +1,17 @@
 #include "ConsoleInterface.h"
 
-void ConsoleInterface::printField(GameSession& game, int gamerIndex, int boardIndex) {
+template<typename T>
+void ConsoleInterface::read(T& object) {
+    std::cin >> object;
+    while (!std::cin) {
+        std::cin.clear();
+        std::cin.ignore(100, '\n');
+        ErrorCommand("Invalid input! Try again: \n").execute();
+        std::cin >> object;
+    }
+}
+
+void ConsoleInterface::showField(GameSession& game, int gamerIndex, int boardIndex) {
     std::cout << "+";
     for (size_t j = 0; j < game.getBoardWidth(boardIndex); ++j) {
         std::cout << j;
@@ -15,121 +26,82 @@ void ConsoleInterface::printField(GameSession& game, int gamerIndex, int boardIn
     }
 }
 
-void ConsoleInterface::prepareUser(GameSession& game, int userIndex) {
-    while (!game.getLogged(userIndex)) {
-        std::cout << "Игрок " + std::to_string(userIndex) + ", залогинься:\n";
-        std::string name, password;
-        read(name);
-        read(password);
-        LogInCommand(&game, userIndex, name, password).execute();
-    }
-    while (true) {
-        printField(game, userIndex, userIndex);
-        auto shipList = game.getFreeShips(userIndex);
-        if (shipList.empty()) {
-            std::cout << "Готов 0/1?\n";
-            int x;
-            std::cin >> x;
-            if (x) {
-                game.ready(userIndex);
-                break;
-            }
-        }
-        std::cout << "Выбери корабль:\n";
-        for (int i = 0; i < shipList.size(); ++i) {
+void ConsoleInterface::askForLogin(int userIndex, std::string& name, std::string& password) {
+    std::cout << "Игрок " + std::to_string(userIndex) + ", залогинься:\n";
+    read(name);
+    read(password);
+}
+
+bool ConsoleInterface::askIfReady() {
+    std::cout << "Готов y/n?\n";
+    std::string s;
+    read(s);
+    return s[0] == 'y' or s[0] == 'Y';
+}
+
+int ConsoleInterface::askForShip(std::vector<std::pair<int, int>>& list) {
+    int shipIndex = -2;
+    while (!(shipIndex >= -1 && 0 < list.size() - shipIndex)) {
+        std::cout << "Выберите корабль:\n";
+        for (int i = 0; i < list.size(); ++i) {
             std::cout << i << ' ';
-            for (int j = 0; j < shipList[i].second; ++j) {
+            for (int j = 0; j < list[i].second; ++j) {
                 std::cout << "S";
             }
             std::cout << '\n';
         }
         std::cout << "-1 - Убрать корабль\n";
-        int shipIndex;
         read(shipIndex);
-        if (shipIndex == -1) {
-            std::string s;
-            read(s);
-            game.removeShip(userIndex, {s});
-            continue;
-        }
-        std::string s, t;
-        read(s);
-        read(t);
-        game.setShip(userIndex, shipList[shipIndex].first, {s}, {t});
     }
+    return shipIndex;
 }
 
-template<typename T>
-void ConsoleInterface::read(T& object) {
-    std::cin >> object;
-    while (!std::cin) {
-        std::cin.clear();
-        std::cin.ignore(100, '\n');
-        Error_command("Invalid input! Try again: \n").execute();
-        std::cin >> object;
-    }
+Coordinates ConsoleInterface::askForSquare() {
+    std::cout << "Укажите клетку (например, A5)\n";
+    std::string s;
+    read(s);
+    return {s};
 }
 
-void ConsoleInterface::startConsoleGame() {
-    int input = -1;
-    while (input != 0) {
-        std::cout <<
-                  "1. Регистрация\n" <<
-                  "2. Начать игру\n" <<
-                  "3. Таблица рекордов\n" <<
-                  "0. Выход\n";
-        read(input);
-        if (input == 1) {
-            registerPlayer();
-        } else if (input == 2) {
-            newGame();
-        } else if (input == 3) {
-            printLeaderBoard();
-        }
-    }
+void ConsoleInterface::showMenu() {
+    std::cout <<
+              "1. Регистрация\n" <<
+              "2. Начать игру\n" <<
+              "3. Таблица рекордов\n" <<
+              "0. Выход\n";
 }
 
-void ConsoleInterface::registerPlayer() {
-    std::cout << "Введи имя:\n";
-    std::string name, password;
+int ConsoleInterface::getOption() {
+    int x;
+    read(x);
+    return x;
+}
+
+void ConsoleInterface::askRegister(std::string& name, std::string& password) {
+
+    std::cout << "Введите имя:\n";
     read(name);
-    std::cout << "Введи пароль:\n";
+    std::cout << "Введите пароль:\n";
     read(password);
-    system->register_new_player(name, password);
 }
 
-void ConsoleInterface::newGame() {
-    GameSession gameSession(*system);
-    for (int gamerIndex = 0; gamerIndex < gameSession.getNumberOfPlayers(); ++gamerIndex) {
-        prepareUser(gameSession, gamerIndex);
-    }
-    while (gameSession.getWinner() == -1) {
-        int playerIndex = gameSession.getCurrentPlayer();
-        PlayerData data = gameSession.getPlayerData(playerIndex);
-        std::string nick = data.getNickName();
-        std::string name, password;
-        do {
-            std::cout << "Вводи пароль снова, " + nick + "\n";
-            read(password);
-        } while (!system->login(gameSession.getGamerName(playerIndex), password));
-        while (gameSession.getCurrentPlayer() == playerIndex && gameSession.getWinner() == -1) {
-            for (int i = 0; i < gameSession.getNumberOfPlayers(); ++i) {
-                std::cout << "Доска игрока " << gameSession.getPlayerData(i).getNickName() << '\n';
-                printField(gameSession, playerIndex, i);
-                std::cout << '\n';
-            }
-            std::cout << "Выбирай клетку для атаки:\n";
-            std::string s;
-            read(s);
-            int nextPlayerIndex = (playerIndex + 1) % gameSession.getNumberOfPlayers();
-            gameSession.bomb(playerIndex, nextPlayerIndex, {s});
-        }
+void ConsoleInterface::showAllBoards(GameSession& game, int playerIndex) {
+    for (int i = 0; i < game.getNumberOfPlayers(); ++i) {
+        SayCommand("Доска игрока " + game.getPlayerData(i).getNickName() + "\n").execute();
+        showField(game, playerIndex, i);
+        std::cout << '\n';
     }
 }
 
-void ConsoleInterface::printLeaderBoard() const {
+void ConsoleInterface::loginAgain(const std::string& nick, std::string& password) {
+    SayCommand("Введте пароль снова, " + nick + "\n").execute();
+    read(password);
+}
+
+void ConsoleInterface::showLeaderBoard() {
     auto vector = system->getLeaderScore();
     for (auto& pair: vector) {
         std::cout << pair.first << ' ' << pair.second << '\n';
     }
 }
+

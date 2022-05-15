@@ -2,11 +2,11 @@
 
 #include <utility>
 
-Error_command::Error_command() : message("Something went wrong!") {
+ErrorCommand::ErrorCommand() : message("Something went wrong!") {
 
 }
 
-Error_command::Error_command(std::string message) : message(std::move(message)) {
+ErrorCommand::ErrorCommand(std::string message) : message(std::move(message)) {
 
 }
 

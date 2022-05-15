@@ -3,9 +3,9 @@
 #include "player_data.h"
 #include "board.h"
 #include "Command.h"
-#include "Registration_system.h"
+#include "RegistrationSystem.h"
 
-class Registration_system;
+class RegistrationSystem;
 
 class GameSession {
 private:
@@ -16,7 +16,7 @@ private:
     int currentMove = 0;
     bool gamerReady[NUMBER_OF_PLAYERS];
     bool gamerLogged[NUMBER_OF_PLAYERS];
-    Registration_system* system;
+    RegistrationSystem* system;
     int theWinner = -1;
 
     void assertIndex(int gamerIndex) const;
@@ -24,7 +24,7 @@ private:
     void assertGameEnd() const;
 
 public:
-    explicit GameSession(Registration_system& system);;
+    explicit GameSession(RegistrationSystem& system);;
 
     bool allGamersAreReady();
 

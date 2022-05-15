@@ -15,13 +15,13 @@ public:
     virtual void execute() = 0;
 };
 
-class Error_command : Command {
+class ErrorCommand : Command {
 private:
     std::string message;
 public:
-    Error_command();
+    ErrorCommand();
 
-    explicit Error_command(std::string message);
+    explicit ErrorCommand(std::string message);
 
     void execute() override {
         std::cerr << message;
