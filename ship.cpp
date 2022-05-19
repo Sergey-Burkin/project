@@ -32,6 +32,10 @@ int Ship::getSize() const {
     return size;
 }
 
+std::vector<Square*>& Ship::getDeck() {
+    return deck;
+}
+
 LinearShip::LinearShip(size_t n) {
     size = n;
     isSetted = false;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "mark.h"
+#include "coordinates.h"
 
 class Ship;
 
@@ -9,6 +10,7 @@ private:
     Ship* ship = nullptr;
     bool bombed = false;
     Mark state = Mark('*');
+    Coordinates coordinates;
 public:
     void setShip(Ship& other);
 
@@ -26,4 +28,7 @@ public:
 
     Ship* getShip();
 
+    void setCoordinates(Coordinates c);
+
+    Coordinates getCoordinates() const;
 };

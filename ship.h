@@ -25,6 +25,8 @@ public:
     virtual int getHealth();
 
     virtual bool getSetted();
+
+    std::vector<Square*>& getDeck();
 };
 
 class LinearShip : public Ship {

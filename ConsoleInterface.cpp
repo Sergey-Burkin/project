@@ -41,9 +41,10 @@ bool ConsoleInterface::askIfReady() {
 
 int ConsoleInterface::askForShip(std::vector<std::pair<int, int>>& list) {
     int shipIndex = -2;
-    while (!(shipIndex >= -1 && 0 < list.size() - shipIndex)) {
+    int numberOfShips = list.size();
+    while (!(shipIndex >= -1 && 0 < numberOfShips - shipIndex)) {
         std::cout << "Выберите корабль:\n";
-        for (int i = 0; i < list.size(); ++i) {
+        for (int i = 0; i < numberOfShips; ++i) {
             std::cout << i << ' ';
             for (int j = 0; j < list[i].second; ++j) {
                 std::cout << "S";
@@ -56,10 +57,23 @@ int ConsoleInterface::askForShip(std::vector<std::pair<int, int>>& list) {
     return shipIndex;
 }
 
+bool goodString(const std::string& s) {
+    auto goodInt = [](int x) { return 0 <= x && x < 10; };
+    if (s.size() != 2) { return false; }
+    int x = s[0] - 'A';
+    int y = s[1] - '0';
+    return goodInt(x) && goodInt(y);
+}
+
 Coordinates ConsoleInterface::askForSquare() {
-    std::cout << "Укажите клетку (например, A5)\n";
     std::string s;
-    read(s);
+    while (!goodString(s)) {
+        std::cout << "Укажите клетку (например, A5)\n";
+        read(s);
+        if (!goodString(s)) {
+            ErrorCommand("Format Error\n").execute();
+        }
+    }
     return {s};
 }
 
